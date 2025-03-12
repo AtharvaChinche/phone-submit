@@ -1,5 +1,15 @@
+const express = require("express");
+const cors = require("cors");
+const fetch = require("node-fetch");
+
+const app = express(); // ✅ Initialize Express before using "app"
+
+app.use(express.json());
+app.use(cors());
+
 const GOOGLE_FORM_URL = "https://docs.google.com/forms/u/0/d/1wUEG981PU2leDPnlu9ADb86YCo5KigMZOSWPH51PLmw/prefill"; // ✅ Replace with your Google Form submission URL
-const FIELD_ENTRY_ID = "entry.226698447"; // ✅ Replace with your field entry ID
+const FIELD_ENTRY_ID = "
+entry.226698447"; // ✅ Replace with correct field ID
 
 app.post("/submit", async (req, res) => {
     try {
@@ -9,7 +19,6 @@ app.post("/submit", async (req, res) => {
             return res.status(400).json({ error: "Missing phone number" });
         }
 
-        // Submit the phone number to Google Forms
         const formData = new URLSearchParams();
         formData.append(FIELD_ENTRY_ID, userPhoneNumber);
 
@@ -28,3 +37,7 @@ app.post("/submit", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// ✅ Fix: Ensure the server listens on process.env.PORT
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
